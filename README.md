@@ -1,6 +1,6 @@
 **Spielkonzept: Darkout**
 
-![Darkout vision](image.png)
+![Darkout vision](assets/image.png)
 
 ## 1. **Grundidee und Ziel des Spiels**
 "Darkout" ist ein PvP-Mehrspielerspiel, das in einer dunklen, labyrinthartigen Arena stattfindet. Zwei Spieler treten gegeneinander an: Einer übernimmt die Rolle des Jägers, der andere ist der Gejagte.
@@ -44,4 +44,3 @@ Das Ziel des Gejagten ist es, eine vorgegebene Anzahl an Schlüsseln zu sammeln 
 
 **Zusammenfassung:**
 "Darkout" ist ein intensives Katz-und-Maus-Spiel, bei dem sich zwei Spieler in einer dunklen Arena gegenüberstehen. Die limitierte Sicht und die asymmetrischen Ziele der Spieler sorgen für spannende Verfolgungsjagden und taktische Manöver. Ohne Punkte oder Progressionssystem liegt der Fokus auf direkter Konfrontation und strategischem Geschick.
-

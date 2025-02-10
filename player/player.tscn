@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmj5ydvfnemu0"]
+
+[ext_resource type="Texture2D" uid="uid://dhbi3yx2jx24i" path="res://assets/kenney_scribble-dungeons/Characters/green_character.png" id="1_02113"]
+[ext_resource type="Script" path="res://player/player.gd" id="1_ycwqa"]
+[ext_resource type="Texture2D" uid="uid://bwqepa0dfxtqd" path="res://assets/kenney_scribble-dungeons/Characters/green_hand.png" id="2_nhara"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cghp6"]
+radius = 41.0
+height = 158.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_ycwqa")
+
+[node name="Character" type="Node2D" parent="."]
+
+[node name="GreenCharacter" type="Sprite2D" parent="Character"]
+texture = ExtResource("1_02113")
+
+[node name="GreenHand" type="Sprite2D" parent="Character"]
+position = Vector2(-60, -16)
+texture = ExtResource("2_nhara")
+
+[node name="GreenHand2" type="Sprite2D" parent="Character"]
+position = Vector2(60, -16)
+rotation = 2.45859
+texture = ExtResource("2_nhara")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_cghp6")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
