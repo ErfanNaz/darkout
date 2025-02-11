@@ -1,22 +1,18 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
-@onready var character: Node2D = $Character
+@onready var character: Node2D = %Character
+
+@export var is_enemy: bool = false
+
+const ENEMY_MATERIAL = preload("res://player/enemy_material.tres")
+
+func _ready() -> void:
+	if is_enemy:
+		_updates_for_enemy()
 
 
-@export var speed = 300.0
-@export var speed_handicap = 0.1
-
-var direction: Vector2 = Vector2.ZERO
-
-func _physics_process(delta: float) -> void:
-	direction.y = Input.get_axis("move_up","move_down")
-	direction.x = Input.get_axis("move_left","move_right")
-	direction = direction.normalized()
-	
-	velocity = direction * speed
-	
-	if direction.length() > 0:  # Nur drehen, wenn der Charakter sich bewegt
-		var r = atan2(direction.y, direction.x) + PI / 2
-		character.rotation = r
-		
-	move_and_slide()
+func _updates_for_enemy() -> void:
+	for child in character.get_children():
+		if child is Sprite2D:
+			child.material = ENEMY_MATERIAL
+			child.modulate = Color("ff0000")

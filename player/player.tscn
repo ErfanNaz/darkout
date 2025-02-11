@@ -1,17 +1,149 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmj5ydvfnemu0"]
+[gd_scene load_steps=13 format=3 uid="uid://dmj5ydvfnemu0"]
 
 [ext_resource type="Texture2D" uid="uid://dhbi3yx2jx24i" path="res://assets/kenney_scribble-dungeons/Characters/green_character.png" id="1_02113"]
 [ext_resource type="Script" path="res://player/player.gd" id="1_ycwqa"]
 [ext_resource type="Texture2D" uid="uid://bwqepa0dfxtqd" path="res://assets/kenney_scribble-dungeons/Characters/green_hand.png" id="2_nhara"]
+[ext_resource type="Script" path="res://player/state_machine/player_state_machine.gd" id="4_qpnt4"]
+[ext_resource type="Script" path="res://shared/state-machine/state-machine.gd" id="5_4rr57"]
+[ext_resource type="Script" path="res://player/state_machine/idle.gd" id="6_ajpxf"]
+[ext_resource type="Script" path="res://player/state_machine/walking.gd" id="7_sq2pb"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cghp6"]
-radius = 41.0
-height = 158.0
+[sub_resource type="Animation" id="Animation_xn6wq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GreenHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-60, -16)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GreenHand2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(60, -16)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GreenCharacter:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xgwrx"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GreenHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-60, -16), Vector2(-62, -18)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GreenHand2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(60, -16), Vector2(62, -14)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GreenCharacter:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.98, 0.98)]
+}
+
+[sub_resource type="Animation" id="Animation_qwa5v"]
+resource_name = "walking"
+length = 0.2
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GreenHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-64, 16), Vector2(-60, -16)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GreenHand2:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(58, -25), Vector2(67, 16)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("GreenCharacter:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.96, 0.96), Vector2(1, 1), Vector2(0.96, 0.96)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lv24d"]
+_data = {
+"RESET": SubResource("Animation_xn6wq"),
+"idle": SubResource("Animation_xgwrx"),
+"walking": SubResource("Animation_qwa5v")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ffktw"]
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_ycwqa")
 
 [node name="Character" type="Node2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(0.4, 0.4)
 
 [node name="GreenCharacter" type="Sprite2D" parent="Character"]
 texture = ExtResource("1_02113")
@@ -25,9 +157,32 @@ position = Vector2(60, -16)
 rotation = 2.45859
 texture = ExtResource("2_nhara")
 
+[node name="CharacterAnimationPlayer" type="AnimationPlayer" parent="Character"]
+libraries = {
+"": SubResource("AnimationLibrary_lv24d")
+}
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
-shape = SubResource("CapsuleShape2D_cghp6")
+scale = Vector2(1.7, 1.7)
+shape = SubResource("CapsuleShape2D_ffktw")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
 position_smoothing_enabled = true
+
+[node name="PlayerStateMachine" type="Node" parent="."]
+script = ExtResource("4_qpnt4")
+
+[node name="StateMachine" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("current_state")]
+script = ExtResource("5_4rr57")
+current_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="PlayerStateMachine/StateMachine"]
+script = ExtResource("6_ajpxf")
+
+[node name="Walking" type="Node" parent="PlayerStateMachine/StateMachine"]
+script = ExtResource("7_sq2pb")
+
+[connection signal="want_walk" from="PlayerStateMachine/StateMachine/Idle" to="PlayerStateMachine" method="_on_idle_want_walk"]
+[connection signal="standing" from="PlayerStateMachine/StateMachine/Walking" to="PlayerStateMachine" method="_on_walking_standing"]
