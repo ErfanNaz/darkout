@@ -1,10 +1,15 @@
-[gd_scene load_steps=12 format=4 uid="uid://grks3yglli5y"]
+[gd_scene load_steps=13 format=4 uid="uid://grks3yglli5y"]
 
 [ext_resource type="PackedScene" uid="uid://dmj5ydvfnemu0" path="res://player/player.tscn" id="1_o2e57"]
 [ext_resource type="Texture2D" uid="uid://dipstnxe8vhau" path="res://assets/example-map.png" id="1_qia4u"]
 [ext_resource type="Texture2D" uid="uid://beljagyhyes1g" path="res://assets/kenney_scribble-dungeons/Tilesheet/tilesheet.png" id="3_fgvua"]
+[ext_resource type="Texture2D" uid="uid://dsy42vbsy5hfp" path="res://assets/lightshape.png" id="4_e43ed"]
+[ext_resource type="Script" path="res://player/player_point_light.gd" id="5_svq0t"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_dk0wu"]
+polygon = PackedVector2Array(-32, -32, 32, -32, 32, -9, -32, -9.5)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_kuj0w"]
 polygon = PackedVector2Array(-32, -32, 32, -32, 32, -9, -32, -9.5)
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o6r7s"]
@@ -44,6 +49,7 @@ texture_region_size = Vector2i(64, 64)
 7:1/0 = 0
 8:1/0 = 0
 9:1/0 = 0
+9:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(11.75, -32, 32, -32, 32, -8, -1.25, -1.5, -8.25, 32, -32, 32, -32, 13, -18.25, -17)
 10:1/0 = 0
 11:1/0 = 0
 12:1/0 = 0
@@ -74,10 +80,13 @@ texture_region_size = Vector2i(64, 64)
 7:3/0 = 0
 8:3/0 = 0
 9:3/0 = 0
+9:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-15.25, -32, 32, -32, 32, -8, -7.25, -8, -8.25, 32, -32, 32, -32, -15)
 10:3/0 = 0
 11:3/0 = 0
 12:3/0 = 0
 13:3/0 = 0
+13:3/0/occlusion_layer_0/polygon = SubResource("OccluderPolygon2D_kuj0w")
+13:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-23.25, -32, 23.75, -32, 23.75, 32, -22.25, 32)
 0:4/0 = 0
 1:4/0 = 0
 2:4/0 = 0
@@ -91,6 +100,7 @@ texture_region_size = Vector2i(64, 64)
 11:4/0 = 0
 12:4/0 = 0
 13:4/0 = 0
+13:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-23.25, -32, 23.75, -32, 23.75, 32, -22.25, 32)
 0:5/0 = 0
 1:5/0 = 0
 2:5/0 = 0
@@ -104,7 +114,9 @@ texture_region_size = Vector2i(64, 64)
 10:5/0 = 0
 11:5/0 = 0
 12:5/0 = 0
+12:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-11.75, -32, 10.25, -32, 9.75, 32, -10.25, 32)
 13:5/0 = 0
+13:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.75, -32, 20.75, -32, 21.75, 32, -22.25, 32)
 0:6/0 = 0
 1:6/0 = 0
 2:6/0 = 0
@@ -177,22 +189,13 @@ physics_layer_0/collision_layer = 256
 physics_layer_0/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_vwyax")
 
-[sub_resource type="Gradient" id="Gradient_mx3yf"]
-offsets = PackedFloat32Array(0, 0.324675, 0.61039)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_7bv7q"]
-gradient = SubResource("Gradient_mx3yf")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tf0j8"]
 light_mode = 2
 
 [node name="World" type="Node2D"]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.187176, 0.187176, 0.187176, 1)
+color = Color(0.762404, 0.762404, 0.762403, 1)
 
 [node name="Example-map" type="Sprite2D" parent="."]
 visible = false
@@ -201,8 +204,8 @@ scale = Vector2(6, 6)
 texture = ExtResource("1_qia4u")
 
 [node name="background" type="Sprite2D" parent="."]
-position = Vector2(0, -8)
-scale = Vector2(400, 400)
+texture_repeat = 2
+scale = Vector2(40, 40)
 texture = ExtResource("3_fgvua")
 hframes = 14
 vframes = 11
@@ -214,12 +217,13 @@ tile_set = SubResource("TileSet_kjkdr")
 [node name="Player" parent="." instance=ExtResource("1_o2e57")]
 collision_mask = 257
 
-[node name="PointLight2D" type="PointLight2D" parent="Player"]
-color = Color(0.489622, 0.489622, 0.489622, 1)
+[node name="PointLight2D" type="PointLight2D" parent="Player" node_paths=PackedStringArray("player")]
+color = Color(0.873298, 0.873298, 0.873298, 1)
 blend_mode = 2
 shadow_enabled = true
-texture = SubResource("GradientTexture2D_7bv7q")
-texture_scale = 10.0
+texture = ExtResource("4_e43ed")
+script = ExtResource("5_svq0t")
+player = NodePath("..")
 
 [node name="Player2" parent="." instance=ExtResource("1_o2e57")]
 light_mask = 2

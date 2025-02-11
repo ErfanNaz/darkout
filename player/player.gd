@@ -6,6 +6,8 @@ class_name Player extends CharacterBody2D
 
 const ENEMY_MATERIAL = preload("res://player/enemy_material.tres")
 
+signal character_rotated(rotation: float)
+
 func _ready() -> void:
 	if is_enemy:
 		_updates_for_enemy()

@@ -33,9 +33,10 @@ func _physics_process(delta: float) -> void:
 		return
 		
 	if velocity != Vector2.ZERO:
-		var character_rotation = atan2(velocity.y, velocity.x)
+		var character_rotation: float = atan2(velocity.y, velocity.x)
 		character.rotation = character_rotation + PI / 2
 		collision_shape_2d.rotation = character_rotation
+		player.character_rotated.emit(character.rotation)
 	
 	player.velocity = direction * speed
 	player.move_and_slide()
