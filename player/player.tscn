@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://player/player.gd" id="1_ycwqa"]
 [ext_resource type="Texture2D" uid="uid://bwqepa0dfxtqd" path="res://assets/kenney_scribble-dungeons/Characters/green_hand.png" id="2_nhara"]
 [ext_resource type="Script" path="res://player/state_machine/player_state_machine.gd" id="4_qpnt4"]
-[ext_resource type="Script" path="res://shared/state-machine/state-machine.gd" id="5_4rr57"]
+[ext_resource type="Script" path="res://shared/state_machine/state_machine.gd" id="5_4rr57"]
 [ext_resource type="Script" path="res://player/state_machine/idle.gd" id="6_ajpxf"]
 [ext_resource type="Script" path="res://player/state_machine/walking.gd" id="7_sq2pb"]
 
@@ -139,6 +139,7 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ffktw"]
 
 [node name="Player" type="CharacterBody2D"]
+collision_mask = 257
 script = ExtResource("1_ycwqa")
 
 [node name="Character" type="Node2D" parent="."]
@@ -168,6 +169,7 @@ scale = Vector2(1.7, 1.7)
 shape = SubResource("CapsuleShape2D_ffktw")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 
 [node name="PlayerStateMachine" type="Node" parent="."]

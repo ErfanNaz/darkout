@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=4 uid="uid://grks3yglli5y"]
+[gd_scene load_steps=14 format=4 uid="uid://grks3yglli5y"]
 
 [ext_resource type="PackedScene" uid="uid://dmj5ydvfnemu0" path="res://player/player.tscn" id="1_o2e57"]
 [ext_resource type="Texture2D" uid="uid://dipstnxe8vhau" path="res://assets/example-map.png" id="1_qia4u"]
 [ext_resource type="Texture2D" uid="uid://beljagyhyes1g" path="res://assets/kenney_scribble-dungeons/Tilesheet/tilesheet.png" id="3_fgvua"]
+[ext_resource type="PackedScene" uid="uid://crahl5x4g5qw8" path="res://shared/controller_manager/controller_manager.tscn" id="4_5b1kq"]
 [ext_resource type="Texture2D" uid="uid://dsy42vbsy5hfp" path="res://assets/lightshape.png" id="4_e43ed"]
 [ext_resource type="Script" path="res://player/player_point_light.gd" id="5_svq0t"]
 
@@ -214,8 +215,10 @@ vframes = 11
 tile_map_data = PackedByteArray("AAD7//r/AQAKAAAAAFD7//v/AQAKAAAAAFD7//z/AQAKAAAAAFD7//3/AQAJAAAAAAD7//7/AQAKAAAAAGD7////AQAKAAAAAGD7/wAAAQAKAAAAAGD7/wEAAQAKAAAAAGD7/wIAAQAKAAAAAGD7/wMAAQAJAAAAAGD8/wMAAQAKAAAAADD9/wMAAQAKAAAAADD+//r/AQAKAAAAAGD+//v/AQAKAAAAAGD+//z/AQAKAAAAAGD+//3/AQAKAAAAAAD+/wMAAQAKAAAAADD///3/AQAKAAAAAAD//wMAAQAKAAAAADAAAP3/AQAKAAAAAAAAAAMAAQAKAAAAADABAP3/AQAKAAAAAAABAAMAAQAKAAAAADACAP3/AQAKAAAAAAACAAMAAQAKAAAAADADAP3/AQAJAAAAAFADAP7/AQAKAAAAAFADAP//AQAKAAAAAFADAAAAAQAKAAAAAFADAAEAAQAKAAAAAFADAAIAAQAKAAAAAFADAAMAAQAJAAAAADD7//n/AQAJAAAAAGD+//n/AQAJAAAAADD+//j/AQAKAAAAAFD+//f/AQAKAAAAAFD+//b/AQAKAAAAAFD7//j/AQAKAAAAAGD7//f/AQAKAAAAAGD7//b/AQAKAAAAAGD7//X/AQAKAAAAAGD7//T/AQAJAAAAAAAEAPT/AQAJAAAAAFAEAPj/AQAJAAAAADABAPj/AQAJAAAAAGD///b/AQAJAAAAAGD8//T/AQAKAAAAAAD9//T/AQAKAAAAAAD+//T/AQAKAAAAAAD///T/AQAKAAAAAAAAAPT/AQAKAAAAAAABAPT/AQAKAAAAAAACAPT/AQAKAAAAAAADAPT/AQAKAAAAAAAEAPX/AQAKAAAAAFAEAPb/AQAKAAAAAFAEAPf/AQAKAAAAAFADAPj/AQAKAAAAADACAPj/AQAKAAAAADABAPf/AQAKAAAAAGAAAPb/AQAKAAAAADA=")
 tile_set = SubResource("TileSet_kjkdr")
 
-[node name="Player" parent="." instance=ExtResource("1_o2e57")]
-collision_mask = 257
+[node name="Player" parent="." node_paths=PackedStringArray("controller_manager") instance=ExtResource("1_o2e57")]
+controller_manager = NodePath("ControllerManager")
+
+[node name="ControllerManager" parent="Player" instance=ExtResource("4_5b1kq")]
 
 [node name="PointLight2D" type="PointLight2D" parent="Player" node_paths=PackedStringArray("player")]
 color = Color(0.873298, 0.873298, 0.873298, 1)
@@ -225,10 +228,16 @@ texture = ExtResource("4_e43ed")
 script = ExtResource("5_svq0t")
 player = NodePath("..")
 
-[node name="Player2" parent="." instance=ExtResource("1_o2e57")]
+[node name="Player2" parent="." node_paths=PackedStringArray("controller_manager") instance=ExtResource("1_o2e57")]
 light_mask = 2
 visibility_layer = 2
 material = SubResource("CanvasItemMaterial_tf0j8")
 position = Vector2(-152, -280)
-rotation = 1.59658
 is_enemy = true
+controller_manager = NodePath("ControllerManager")
+
+[node name="ControllerManager" parent="Player2" instance=ExtResource("4_5b1kq")]
+direction_actions = Array[String](["move_left_2", "move_right_2", "move_up_2", "move_down_2"])
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath("../Player")

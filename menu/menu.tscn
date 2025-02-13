@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://prgbd32gw0sa"]
+
+[ext_resource type="Script" path="res://menu/menu.gd" id="1_0hy4t"]
+
+[node name="Menu" type="CanvasLayer"]
+script = ExtResource("1_0hy4t")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+
+[node name="HFlowContainer" type="HFlowContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HFlowContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HFlowContainer/HBoxContainer"]
+layout_mode = 2
+text = "Port:"
+
+[node name="PortInput" type="LineEdit" parent="Control/MarginContainer/HFlowContainer/HBoxContainer"]
+layout_mode = 2
+text = "9999"
+placeholder_text = "9999"
+
+[node name="HostButton" type="Button" parent="Control/MarginContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="Control/MarginContainer/HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Join"
+
+[connection signal="pressed" from="Control/MarginContainer/HFlowContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/HFlowContainer/JoinButton" to="." method="_on_join_button_pressed"]

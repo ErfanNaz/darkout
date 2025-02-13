@@ -6,19 +6,17 @@ class_name PlayerIdle extends State
 signal want_walk()
 
 func _ready() -> void:
-	set_process_input(false)
+	var controller_manager = player.controller_manager
+	if !controller_manager:
+		return
+	controller_manager.controller_input_changed.connect(_input_changed)
 
 func on_enter() -> void:
 	character_animation_player.play("idle")
-	if player.is_enemy:
-		return
-	set_process_input(true)
 	
 func on_exit() -> void:
 	set_process_input(false)
 
-func _input(event: InputEvent) -> void:
-	var move_actions: Array[String] = ["move_down", "move_up", "move_left", "move_right"]
-	for action in move_actions:
-		if event.is_action_pressed(action):
-			want_walk.emit()
+func _input_changed(controller_input: ControllerInput) -> void:
+	if controller_input.direction != Vector2.ZERO:
+		want_walk.emit()

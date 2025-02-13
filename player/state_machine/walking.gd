@@ -10,21 +10,26 @@ class_name PlayerWalking extends State
 signal standing()
 
 var direction: Vector2 = Vector2.ZERO
+var controller_input: ControllerInput
 
 func _ready() -> void:
 	set_physics_process(false)
 
 func on_enter() -> void:
 	character_animation_player.play("walking")
+	controller_input = player.controller_manager.controller_input
+	player.controller_manager.controller_input_changed.connect(_input_changed)
 	set_physics_process(true)
 	
 func on_exit() -> void:
+	player.controller_manager.controller_input_changed.disconnect(_input_changed)
 	set_physics_process(false)
+	
+func _input_changed(new_controller_input: ControllerInput) -> void:
+	controller_input = new_controller_input
 
 func _physics_process(delta: float) -> void:
-	direction.y = Input.get_axis("move_up","move_down")
-	direction.x = Input.get_axis("move_left","move_right")
-	direction = direction.normalized()
+	direction = controller_input.direction.normalized()
 	
 	var velocity: Vector2 = player.velocity
 	
