@@ -1,12 +1,16 @@
-[gd_scene load_steps=13 format=3 uid="uid://dmj5ydvfnemu0"]
+[gd_scene load_steps=18 format=3 uid="uid://dmj5ydvfnemu0"]
 
 [ext_resource type="Texture2D" uid="uid://dhbi3yx2jx24i" path="res://assets/kenney_scribble-dungeons/Characters/green_character.png" id="1_02113"]
 [ext_resource type="Script" path="res://player/player.gd" id="1_ycwqa"]
+[ext_resource type="Material" uid="uid://cbbcb6lqtyl1" path="res://player/enemy_material.tres" id="2_cf8e4"]
 [ext_resource type="Texture2D" uid="uid://bwqepa0dfxtqd" path="res://assets/kenney_scribble-dungeons/Characters/green_hand.png" id="2_nhara"]
+[ext_resource type="Texture2D" uid="uid://dsy42vbsy5hfp" path="res://assets/lightshape.png" id="4_ijgou"]
 [ext_resource type="Script" path="res://player/state_machine/player_state_machine.gd" id="4_qpnt4"]
-[ext_resource type="Script" path="res://shared/state_machine/state_machine.gd" id="5_4rr57"]
+[ext_resource type="Script" path="res://common/state_machine/state_machine.gd" id="5_4rr57"]
+[ext_resource type="Script" path="res://player/player_point_light.gd" id="5_s88l2"]
 [ext_resource type="Script" path="res://player/state_machine/idle.gd" id="6_ajpxf"]
 [ext_resource type="Script" path="res://player/state_machine/walking.gd" id="7_sq2pb"]
+[ext_resource type="Script" path="res://common/controller_manager/controller_manager.gd" id="8_f1ak8"]
 
 [sub_resource type="Animation" id="Animation_xn6wq"]
 length = 0.001
@@ -138,22 +142,40 @@ _data = {
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ffktw"]
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_23tfr"]
+properties/0/path = NodePath(".:is_enemy")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("Character:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("Character/CharacterAnimationPlayer:current_animation")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("controller_manager")]
 collision_mask = 257
 script = ExtResource("1_ycwqa")
+controller_manager = NodePath("ControllerManager")
 
 [node name="Character" type="Node2D" parent="."]
 unique_name_in_owner = true
 scale = Vector2(0.4, 0.4)
 
 [node name="GreenCharacter" type="Sprite2D" parent="Character"]
+material = ExtResource("2_cf8e4")
 texture = ExtResource("1_02113")
 
 [node name="GreenHand" type="Sprite2D" parent="Character"]
+material = ExtResource("2_cf8e4")
 position = Vector2(-60, -16)
 texture = ExtResource("2_nhara")
 
 [node name="GreenHand2" type="Sprite2D" parent="Character"]
+material = ExtResource("2_cf8e4")
 position = Vector2(60, -16)
 rotation = 2.45859
 texture = ExtResource("2_nhara")
@@ -169,8 +191,15 @@ scale = Vector2(1.7, 1.7)
 shape = SubResource("CapsuleShape2D_ffktw")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3, 3)
 position_smoothing_enabled = true
+
+[node name="PointLight2D" type="PointLight2D" parent="." node_paths=PackedStringArray("player")]
+color = Color(0.873298, 0.873298, 0.873298, 1)
+blend_mode = 2
+shadow_enabled = true
+texture = ExtResource("4_ijgou")
+script = ExtResource("5_s88l2")
+player = NodePath("..")
 
 [node name="PlayerStateMachine" type="Node" parent="."]
 script = ExtResource("4_qpnt4")
@@ -184,6 +213,13 @@ script = ExtResource("6_ajpxf")
 
 [node name="Walking" type="Node" parent="PlayerStateMachine/StateMachine"]
 script = ExtResource("7_sq2pb")
+speed = null
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_23tfr")
+
+[node name="ControllerManager" type="Node" parent="."]
+script = ExtResource("8_f1ak8")
 
 [connection signal="want_walk" from="PlayerStateMachine/StateMachine/Idle" to="PlayerStateMachine" method="_on_idle_want_walk"]
 [connection signal="standing" from="PlayerStateMachine/StateMachine/Walking" to="PlayerStateMachine" method="_on_walking_standing"]
